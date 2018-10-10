@@ -1,5 +1,7 @@
 package com.belprime.testTask.logic;
 
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import org.jsoup.select.Elements;
 
@@ -12,6 +14,7 @@ public class WebSearchService implements Runnable {
 
     private String[] messages;
     static volatile boolean isRunning = true;
+    private static final Logger logger = Logger.getLogger(WebSearchService.class.getName());
 
     public WebSearchService(String[] messages) {
         this.messages = messages;
@@ -28,7 +31,6 @@ public class WebSearchService implements Runnable {
         PropertyConfigurator.configure(LOGGER_PROPS);
 
         new Thread(producer).start();
-//
         for (int i = 0; i < messages.length; i++)
             executorService.execute(consumer);
         while (true) {
@@ -38,6 +40,7 @@ public class WebSearchService implements Runnable {
         try {
             executorService.awaitTermination(AWAIT_TERMINATION, TimeUnit.SECONDS);
         } catch (InterruptedException e) {
+            logger.log(Level.ALL, "WebSearchService throws exception:");
             e.printStackTrace();
         }
         PageExtractor.displayItems(map);
@@ -48,6 +51,7 @@ class Producer implements Runnable {
 
     private BlockingQueue<Elements> queue;
     private String[] messages;
+    private static final Logger logger = Logger.getLogger(Producer.class.getName());
 
     Producer(BlockingQueue<Elements> queue, String[] messages) {
         this.queue = queue;
@@ -61,6 +65,7 @@ class Producer implements Runnable {
                 queue.put(new PageExtractor(message).getSearchList());
             queue.put(new Elements());
         } catch (IOException | InterruptedException e) {
+            logger.log(Level.ALL, "Producer throws exception:");
             e.printStackTrace();
         }
     }
@@ -71,6 +76,7 @@ class Consumer implements Runnable {
 
     private BlockingQueue<Elements> queue;
     private ConcurrentHashMap<String, String> map;
+    private static final Logger logger = Logger.getLogger(Consumer.class.getName());
 
     Consumer(BlockingQueue<Elements> queue, ConcurrentHashMap<String, String> map) {
         this.queue = queue;
@@ -89,6 +95,7 @@ class Consumer implements Runnable {
                 map.putAll(items);
             }
         } catch (NullPointerException | InterruptedException e) {
+            logger.log(Level.ALL, "Consumer throws exception:");
             e.printStackTrace();
         }
     }

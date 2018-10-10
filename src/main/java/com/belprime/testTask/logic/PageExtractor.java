@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
-import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static com.belprime.testTask.util.Constants.*;
@@ -34,7 +33,7 @@ public final class PageExtractor {
         return document.select(".g>.r>a");
     }
 
-    public static String getUrl(Element link) {
+    private static String getUrl(Element link) {
         String url = link.absUrl("href");
         try {
             url = URLDecoder.decode(url.substring(url.indexOf('=') + 1, url.indexOf('&')), CHARSET);
@@ -53,7 +52,7 @@ public final class PageExtractor {
         return url;
     }
 
-    public static String getTitle(String url) {
+    private static String getTitle(String url) {
         String title = "";
         try {
             title = Jsoup.connect(url).userAgent(USER_AGENT)
@@ -82,9 +81,7 @@ public final class PageExtractor {
     }
 
     public static void displayItems(ConcurrentHashMap<String, String> map) {
-        for (Map.Entry<String, String> entry : map.entrySet()) {
-            System.out.printf("URL %s \tTITLE %s\n", entry.getKey(), entry.getValue());
-        }
+        map.forEach((k, v) -> System.out.printf("URL %s \tTITLE %s\n", k, v));
     }
 
 }
