@@ -1,4 +1,4 @@
-package com.belprime.testTask.util;
+package com.belprime.testTaskSingleUrlProcessing.util;
 
 public class Constants {
 
