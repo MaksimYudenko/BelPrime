@@ -33,7 +33,7 @@ public final class PageExtractor {
         return document.select(".g>.r>a");
     }
 
-    private static String getUrl(Element link) {
+    public static String getUrl(Element link) {
         String url = link.absUrl("href");
         try {
             url = URLDecoder.decode(url.substring(url.indexOf('=') + 1, url.indexOf('&')), CHARSET);
@@ -52,7 +52,7 @@ public final class PageExtractor {
         return url;
     }
 
-    private static String getTitle(String url) {
+    public static String getTitle(String url) {
         String title = "";
         try {
             title = Jsoup.connect(url).userAgent(USER_AGENT)
