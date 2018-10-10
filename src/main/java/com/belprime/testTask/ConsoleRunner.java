@@ -15,9 +15,10 @@ public class ConsoleRunner {
     public static void main(String[] args) {
         for (String message : MessageProvider.getUserRequests()) {
             final List<Element> searchList;
-            ConcurrentHashMap<String, String> map = new ConcurrentHashMap<>();
             try {
                 searchList = new PageExtractor(message).getSearchList();
+
+                ConcurrentHashMap<String, String> map = new ConcurrentHashMap<>();
                 for (Element link : searchList) {
                     if (map.size() == LINKS_QUANTITY) break;
                     final String url = PageExtractor.getUrl(link);
@@ -25,10 +26,11 @@ public class ConsoleRunner {
                     final String title = PageExtractor.getTitle(url);
                     map.put(url, title);
                 }
+
+                PageExtractor.displayItems(map);
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            PageExtractor.displayItems(map);
         }
     }
 

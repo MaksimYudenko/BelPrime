@@ -63,7 +63,7 @@ public final class PageExtractor {
         return title;
     }
 
-    public static ConcurrentHashMap<String, String> getItems(Elements links) {
+    static ConcurrentHashMap<String, String> getItems(Elements links) {
         final ConcurrentHashMap<String, String> map = new ConcurrentHashMap<>();
         for (Element link : links) {
             final String url = getUrl(link);
