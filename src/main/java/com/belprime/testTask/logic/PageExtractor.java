@@ -33,7 +33,7 @@ public final class PageExtractor {
         return document.select(".g>.r>a");
     }
 
-    public static String getUrl(Element link) {
+    private static String getUrl(Element link) {
         String url = link.absUrl("href");
         try {
             url = URLDecoder.decode(url.substring(url.indexOf('=') + 1, url.indexOf('&')), CHARSET);
@@ -52,7 +52,7 @@ public final class PageExtractor {
         return url;
     }
 
-    public static String getTitle(String url) {
+    private static String getTitle(String url) {
         String title = "";
         try {
             title = Jsoup.connect(url).userAgent(USER_AGENT)
@@ -63,7 +63,7 @@ public final class PageExtractor {
         return title;
     }
 
-    static ConcurrentHashMap<String, String> getItems(Elements links) {
+    public static ConcurrentHashMap<String, String> getItems(Elements links) {
         final ConcurrentHashMap<String, String> map = new ConcurrentHashMap<>();
         for (Element link : links) {
             final String url = getUrl(link);
