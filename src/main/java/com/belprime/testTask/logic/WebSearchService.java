@@ -13,6 +13,8 @@ import static com.belprime.testTask.util.Constants.*;
 public class WebSearchService implements Runnable {
 
     private String[] messages;
+    private ConcurrentHashMap<String, String> map = new ConcurrentHashMap<>();
+
     static volatile boolean isRunning = true;
     private static final Logger logger = Logger.getLogger(WebSearchService.class.getName());
 
@@ -23,7 +25,6 @@ public class WebSearchService implements Runnable {
     @Override
     public void run() {
         BlockingQueue<Elements> queue = new LinkedBlockingQueue<>(BQ_CAPACITY);
-        ConcurrentHashMap<String, String> map = new ConcurrentHashMap<>();
         Producer producer = new Producer(queue, messages);
         Consumer consumer = new Consumer(queue, map);
         ExecutorService executorService = Executors.newFixedThreadPool(
@@ -45,6 +46,11 @@ public class WebSearchService implements Runnable {
         }
         PageExtractor.displayItems(map);
     }
+
+    public ConcurrentHashMap<String, String> getMap() {
+        return map;
+    }
+
 }
 
 class Producer implements Runnable {
