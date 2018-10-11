@@ -4,12 +4,17 @@ import com.belprime.testTask.gui.ResultsTable;
 import com.belprime.testTask.logic.WebSearchService;
 import com.belprime.testTask.util.MessageProvider;
 
+import javax.swing.*;
 import java.util.concurrent.ConcurrentHashMap;
+
+import static com.belprime.testTask.util.Constants.WELCOME_PHRASE;
 
 public class MainRunner {
 
     public static void main(String[] args) {
-        final WebSearchService service = new WebSearchService(MessageProvider.getUserRequests());
+        String str = JOptionPane.showInputDialog(WELCOME_PHRASE);
+//      final WebSearchService service = new WebSearchService(MessageProvider.getUserRequests());
+        final WebSearchService service = new WebSearchService(MessageProvider.getUserRequestsViaSwing(str));
         Thread serviceThread = new Thread(service);
         serviceThread.start();
         try {

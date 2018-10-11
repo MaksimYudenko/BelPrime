@@ -22,4 +22,9 @@ public class MessageProvider {
         return msgLine.split(REGEX);
     }
 
+    public static String[] getUserRequestsViaSwing(String requests) {
+        assert requests != null;
+        return requests.split(REGEX);
+    }
+
 }
