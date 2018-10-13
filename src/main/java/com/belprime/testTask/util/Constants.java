@@ -15,8 +15,9 @@ public class Constants {
     public static final Integer AWAIT_TERMINATION = (LINKS_QUANTITY / 3) < 40 ? 30 : LINKS_QUANTITY / 3;
     public static final String WELCOME_PHRASE = "Type a phrase to search (as many as you'd like):";
     static final String REGEX = "\\s*(\\s{2,}|,|!|\\?|;|\\/|\\.)\\s*";
-/*  search line for testing:
-BelPrime! google;  лучший фильм 2018 года/      Nike или Adidas? Погода - Минск.
-*/
+    /*  search line for testing:
+    BelPrime! google;  лучший фильм 2018 года/      Nike или Adidas? Погода - Минск.
+    */
+    public final static String TITLE = "BelPrime web search";
 
 }

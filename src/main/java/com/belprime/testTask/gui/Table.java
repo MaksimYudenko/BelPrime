@@ -5,33 +5,22 @@ import java.awt.*;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class ResultsTable extends JPanel implements Runnable {
-    private static ConcurrentHashMap<String, String> map;
-    private final Integer mapSize;
+public class Table extends JPanel implements Runnable {
 
-    public ResultsTable(ConcurrentHashMap<String, String> map) {
+    private static ConcurrentHashMap<String, String> map;
+    private static Integer mapSize;
+
+    public Table(ConcurrentHashMap<String, String> map) {
         super(new GridLayout(1, 0));
-        ResultsTable.map = map;
-        this.mapSize = map.size();
+        Table.map = map;
+        mapSize = map.size();
         String[] columnNames = {"No", "URL", "Title",};
         Object[][] data = getData(map);
         final JTable table = new JTable(data, columnNames);
-        table.setPreferredScrollableViewportSize(new Dimension(500, mapSize * 20));
+        table.setPreferredScrollableViewportSize(new Dimension(500, mapSize * 30));
         table.setFillsViewportHeight(true);
         JScrollPane scrollPane = new JScrollPane(table);
         add(scrollPane);
-    }
-
-    public static void createAndShowGUI() {
-        JFrame frame = new JFrame("ITSM web search");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        ResultsTable newContentPane = new ResultsTable(map);
-        newContentPane.setOpaque(true); //content panes must be opaque
-        frame.setContentPane(newContentPane);
-
-        frame.pack();
-        frame.setVisible(true);
     }
 
     private Object[][] getData(ConcurrentHashMap<String, String> map) {
@@ -44,6 +33,18 @@ public class ResultsTable extends JPanel implements Runnable {
             i++;
         }
         return data;
+    }
+
+    public static void createAndShowGUI() {
+        JFrame frame = new JFrame("BelPrime web search");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        Table table = new Table(map);
+        table.setOpaque(true);
+        frame.setContentPane(table);
+
+        frame.pack();
+        frame.setVisible(true);
     }
 
     @Override

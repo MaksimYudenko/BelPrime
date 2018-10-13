@@ -1,6 +1,6 @@
 package com.belprime.testTask;
 
-import com.belprime.testTask.gui.ResultsTable;
+import com.belprime.testTask.gui.Table;
 import com.belprime.testTask.logic.WebSearchService;
 import com.belprime.testTask.util.MessageProvider;
 
@@ -23,8 +23,12 @@ public class MainRunner {
             e.printStackTrace();
         }
         ConcurrentHashMap<String, String> map = service.getMap();
-        new Thread(new ResultsTable(map));
-        javax.swing.SwingUtilities.invokeLater(ResultsTable::createAndShowGUI);
+      /*  ConcurrentHashMap<String, String> map = new ConcurrentHashMap<>();
+        map.put("url1", "title1");
+        map.put("url2", "title2");
+        map.put("url3", "title3");*/
+        new Thread(new Table(map));
+        javax.swing.SwingUtilities.invokeLater(Table::createAndShowGUI);
     }
 
 }
