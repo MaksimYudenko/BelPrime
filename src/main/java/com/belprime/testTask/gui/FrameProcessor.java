@@ -8,22 +8,11 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import static com.belprime.testTask.util.Constants.TITLE;
 
-public class Processor {
+public class FrameProcessor {
     private static ConcurrentHashMap<String, String> map = new ConcurrentHashMap<>();
-
-    private static JTextArea answer = new JTextArea();
-    private static String msg;
-    //    private final ConcurrentHashMap<String, String> map;
-    private JPanel table;
-
-/*    private Processor(ConcurrentHashMap<String, String> map) {
-        this.map = map;
-        table = new Table(map);
-    }*/
+    private static JTextArea message = new JTextArea();
 
     private static void createAndShowGUI(Container container, JPanel table) {
-
-
         container.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
         container.setLayout(new GridBagLayout());
         GridBagConstraints constraints = new GridBagConstraints();
@@ -44,10 +33,9 @@ public class Processor {
 
         searchBtn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                msg = textField.getText();
-                answer.setText(String.valueOf(msg));
+                message.setText(String.valueOf(textField.getText()));
 //
-                System.out.println(answer.getText());
+                System.out.println(message.getText());
 
                 SwingUtilities.updateComponentTreeUI(container);
             }
@@ -61,33 +49,26 @@ public class Processor {
         constraints.insets = new Insets(30, 20, 20, 20);
         container.add(table, constraints);
 
-
     }
 
     public static void main(String[] args) {
         JFrame frame = new JFrame(TITLE);
-//        frame.setTitle(TITLE);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-//        final WebSearchService service = new WebSearchService(MessageProvider.getUserRequestsViaSwing(answer.getText()));
-//        ConcurrentHashMap<String, String> map = service.getMap();
         createAndShowGUI(frame.getContentPane(), new Table(map));
 
-        try {
+      /*  try {
             Thread.sleep(3000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
-//        Table table = new Table(map);
-//        Table.createAndShowGUI();
-        map.put(answer.getText(), answer.getText());
+        map.put(message.getText(), message.getText());
 
         map.put("url-1", "title-1");
         map.put("url-2", "title-2");
         map.put("url-3", "title-3");
         createAndShowGUI(frame.getContentPane(), new Table(map));
-
+*/
         frame.pack();
         frame.setVisible(true);
     }
