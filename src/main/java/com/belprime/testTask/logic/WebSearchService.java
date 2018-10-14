@@ -44,7 +44,7 @@ public class WebSearchService implements Runnable {
             logger.log(Level.ALL, "WebSearchService throws exception:");
             e.printStackTrace();
         }
-        PageExtractor.displayItems(map);
+//        PageExtractor.displayItems(map);
     }
 
     public ConcurrentHashMap<String, String> getMap() {
