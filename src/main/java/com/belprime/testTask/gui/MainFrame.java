@@ -25,20 +25,16 @@ public class MainFrame extends JFrame {
 
     public MainFrame() {
         super(TITLE);
-        setFrame(tmpTable);
-//        searchButton.addActionListener(e -> {
-//            MainFrame.message = textField.getText();
-//            start();
-//        });
-//        pack();
-//        JFrame.setDefaultLookAndFeelDecorated(true);
+        showFrame(tmpTable);
+
+        repaint();
 
         setSize(800, 300);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setVisible(true);
     }
 
-    private void setFrame(JTable t) {
+    private void showFrame(JTable t) {
         setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
         setLayout(new GridBagLayout());
         gbc = new GridBagConstraints();
@@ -70,10 +66,10 @@ public class MainFrame extends JFrame {
         gbc.weightx = 1;
         gbc.weighty = 1;
         gbc.insets = new Insets(20, 20, 5, 20);
-        add(tmpTable, gbc);
+        add(t, gbc);
     }
 
-    private void setTable(ConcurrentHashMap<String, String> map) {
+    private JTable getTable(ConcurrentHashMap<String, String> map) {
         panel = new JPanel(new GridLayout(1, 0));
         String[] columnNames = {"No", "URL", "Title",};
         Object[][] data = getData(map);
@@ -82,16 +78,18 @@ public class MainFrame extends JFrame {
         table.setFillsViewportHeight(true);
         JScrollPane scrollPane = new JScrollPane(table);
         add(scrollPane, gbc);
+        return table;
     }
 
     private void showResult(JTable table) {
         remove(tmpTable);
-
-        gbc.ipady = 10;
-        gbc.gridwidth = 3;
+        repaint();
         gbc.gridx = 0;
         gbc.gridy = 1;
-        gbc.insets = new Insets(10, 5, 5, 5);
+        gbc.gridwidth = 3;
+        gbc.weightx = 1;
+        gbc.weighty = 1;
+        gbc.insets = new Insets(20, 20, 5, 20);
         add(table, gbc);
 
         setSize(800, 300);
@@ -132,8 +130,6 @@ public class MainFrame extends JFrame {
                 try {
                     Object[][] data = get();
                     JTable table = new JTable(data, columnNames);
-//                    table.setPreferredScrollableViewportSize(new Dimension(500, 200));
-//                    table.setFillsViewportHeight(true);
                     showResult(table);
 
                 } catch (InterruptedException | ExecutionException e) {
