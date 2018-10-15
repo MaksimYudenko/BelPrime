@@ -16,45 +16,72 @@ public class MainFrame extends JFrame {
     private static String message;
     private ConcurrentHashMap<String, String> map = new ConcurrentHashMap<>();
     private GridBagConstraints gbc;
-    private final JTextField textField = new JTextField(50);
+    private final JTextField textField = new JTextField(30);
+    private final JButton searchButton = new JButton("Search");
     private Object[][] tmpData = new Object[10][3];
     private final String[] columnNames = {"No", "URL", "Title",};
     private JTable tmpTable = new JTable(tmpData, columnNames);
+    private JPanel panel;
 
     public MainFrame() {
         super(TITLE);
+        setFrame(tmpTable);
+//        searchButton.addActionListener(e -> {
+//            MainFrame.message = textField.getText();
+//            start();
+//        });
+//        pack();
+//        JFrame.setDefaultLookAndFeelDecorated(true);
+
+        setSize(800, 300);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setVisible(true);
+    }
+
+    private void setFrame(JTable t) {
         setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
         setLayout(new GridBagLayout());
         gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.anchor = GridBagConstraints.NORTH;
+        gbc.weighty = 0;
 
+        textField.setHorizontalAlignment(0);
         gbc.gridx = 0;
         gbc.gridy = 0;
-        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.weightx = 1;
+        gbc.insets = new Insets(30, 200, 20, 5);
         add(textField, gbc);
 
+        JButton searchButton = new JButton("Search");
         gbc.gridx = 1;
         gbc.gridy = 0;
-        gbc.insets = new Insets(5, 5, 5, 5);
-
-        JButton searchButton = new JButton("Search");
+        gbc.weightx = 0;
+        gbc.insets = new Insets(26, 5, 20, 200);
         add(searchButton, gbc);
         searchButton.addActionListener(e -> {
             MainFrame.message = textField.getText();
             start();
         });
 
-        gbc.ipady = 10;
-        gbc.gridwidth = 3;
         gbc.gridx = 0;
         gbc.gridy = 1;
-        gbc.insets = new Insets(20, 10, 10, 10);
+        gbc.gridwidth = 3;
+        gbc.weightx = 1;
+        gbc.weighty = 1;
+        gbc.insets = new Insets(20, 20, 5, 20);
         add(tmpTable, gbc);
+    }
 
-        setSize(800, 300);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setVisible(true);
-
+    private void setTable(ConcurrentHashMap<String, String> map) {
+        panel = new JPanel(new GridLayout(1, 0));
+        String[] columnNames = {"No", "URL", "Title",};
+        Object[][] data = getData(map);
+        final JTable table = new JTable(data, columnNames);
+        table.setPreferredScrollableViewportSize(new Dimension(500, map.size() * 30));
+        table.setFillsViewportHeight(true);
+        JScrollPane scrollPane = new JScrollPane(table);
+        add(scrollPane, gbc);
     }
 
     private void showResult(JTable table) {
@@ -105,8 +132,8 @@ public class MainFrame extends JFrame {
                 try {
                     Object[][] data = get();
                     JTable table = new JTable(data, columnNames);
-                    table.setPreferredScrollableViewportSize(new Dimension(500, 200));
-                    table.setFillsViewportHeight(true);
+//                    table.setPreferredScrollableViewportSize(new Dimension(500, 200));
+//                    table.setFillsViewportHeight(true);
                     showResult(table);
 
                 } catch (InterruptedException | ExecutionException e) {

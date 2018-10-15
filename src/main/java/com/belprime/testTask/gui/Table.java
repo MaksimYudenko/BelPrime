@@ -5,12 +5,12 @@ import java.awt.*;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class Table extends JPanel implements Runnable {
+public class Table extends JPanel {
 
     private static ConcurrentHashMap<String, String> map;
     private static Integer mapSize;
 
-    public Table(ConcurrentHashMap<String, String> map) {
+    private Table(ConcurrentHashMap<String, String> map) {
         super(new GridLayout(1, 0));
         Table.map = map;
         mapSize = map.size();
@@ -42,14 +42,8 @@ public class Table extends JPanel implements Runnable {
         Table table = new Table(map);
         table.setOpaque(true);
         frame.setContentPane(table);
-
         frame.pack();
         frame.setVisible(true);
-    }
-
-    @Override
-    public void run() {
-        createAndShowGUI();
     }
 
 }
