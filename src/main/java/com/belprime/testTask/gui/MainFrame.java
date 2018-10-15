@@ -14,20 +14,15 @@ import static com.belprime.testTask.util.Constants.TITLE;
 
 public class MainFrame extends JFrame {
     private static String message;
-    private ConcurrentHashMap<String, String> map = new ConcurrentHashMap<>();
     private GridBagConstraints gbc;
     private final JTextField textField = new JTextField(30);
-    private final JButton searchButton = new JButton("Search");
-    private Object[][] tmpData = new Object[10][3];
     private final String[] columnNames = {"No", "URL", "Title",};
+    private Object[][] tmpData = new Object[10][3];
     private JTable tmpTable = new JTable(tmpData, columnNames);
-    private JPanel panel;
 
     public MainFrame() {
         super(TITLE);
         showFrame(tmpTable);
-
-        repaint();
 
         setSize(800, 300);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -69,21 +64,12 @@ public class MainFrame extends JFrame {
         add(t, gbc);
     }
 
-    private JTable getTable(ConcurrentHashMap<String, String> map) {
-        panel = new JPanel(new GridLayout(1, 0));
+    private void showResultTable(ConcurrentHashMap<String, String> map) {
+        repaint();
         String[] columnNames = {"No", "URL", "Title",};
         Object[][] data = getData(map);
-        final JTable table = new JTable(data, columnNames);
-        table.setPreferredScrollableViewportSize(new Dimension(500, map.size() * 30));
-        table.setFillsViewportHeight(true);
-        JScrollPane scrollPane = new JScrollPane(table);
-        add(scrollPane, gbc);
-        return table;
-    }
+        JTable table = new JTable(data, columnNames);
 
-    private void showResult(JTable table) {
-        remove(tmpTable);
-        repaint();
         gbc.gridx = 0;
         gbc.gridy = 1;
         gbc.gridwidth = 3;
@@ -110,33 +96,36 @@ public class MainFrame extends JFrame {
     }
 
     private void start() {
-        SwingWorker<Object[][], JTable> worker = new SwingWorker<Object[][], JTable>() {
-            protected Object[][] doInBackground() {
-                final WebSearchService service = new WebSearchService(
-                        MessageProvider.getUserRequestsViaSwing(message));
-                Thread serviceThread = new Thread(service);
-                serviceThread.start();
-                try {
-                    serviceThread.join();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                map = service.getMap();
-                PageExtractor.displayItems(map);
-                return getData(map);
-            }
+        SwingWorker<ConcurrentHashMap<String, String>, JTable> worker =
+                new SwingWorker<ConcurrentHashMap<String, String>, JTable>() {
 
-            protected void done() {
-                try {
-                    Object[][] data = get();
-                    JTable table = new JTable(data, columnNames);
-                    showResult(table);
+                    protected ConcurrentHashMap<String, String> doInBackground() {
+                        final WebSearchService service = new WebSearchService(
+                                MessageProvider.getUserRequestsViaSwing(message));
+                        Thread serviceThread = new Thread(service);
+                        serviceThread.start();
+                        try {
+                            serviceThread.join();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        ConcurrentHashMap<String, String> results = service.getMap();
+                        PageExtractor.displayItems(results);
+                        return results;
+                    }
 
-                } catch (InterruptedException | ExecutionException e) {
-                    e.printStackTrace();
-                }
-            }
-        };
+                    protected void done() {
+                        try {
+                            ConcurrentHashMap<String, String> map = get();
+                            remove(tmpTable);
+                            showResultTable(map);
+                        } catch (InterruptedException | ExecutionException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                };
+
         worker.execute();
     }
+
 }
