@@ -7,6 +7,7 @@ import com.belprime.testTask.util.MessageProvider;
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
 import java.awt.*;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
 
@@ -23,12 +24,7 @@ public class MainFrame extends JFrame {
 
     public MainFrame() {
         super(TITLE);
-
-        ConcurrentHashMap<String, String> map = new ConcurrentHashMap<>();
-        map.put("url1", "title1");
-        map.put("url2", "title2");
-        map.put("url3", "title3");
-
+        Map<String, String> map = new ConcurrentHashMap<>();
         model = new TableModel(map);
         table = new JTable(model);
 
@@ -59,8 +55,6 @@ public class MainFrame extends JFrame {
         gbc.insets = new Insets(26, 5, 20, 100);
         add(searchButton, gbc);
 
-//        getContentPane().add(new JScrollPane(table), BorderLayout.CENTER);
-//        pack();
         sp = new JScrollPane(table);
         gbc.gridx = 0;
         gbc.gridy = 1;
@@ -69,7 +63,6 @@ public class MainFrame extends JFrame {
         gbc.weighty = 1;
         gbc.insets = new Insets(20, 20, 5, 20);
         add(sp, gbc);
-
         searchButton.addActionListener(e -> {
             MainFrame.message = textField.getText();
             start();
@@ -109,8 +102,8 @@ public class MainFrame extends JFrame {
                             gbc.weightx = 1;
                             gbc.weighty = 1;
                             gbc.insets = new Insets(20, 20, 5, 20);
-                            repaint();
                             add(sp, gbc);
+                            pack();
 
                         } catch (InterruptedException | ExecutionException e) {
                             e.printStackTrace();
