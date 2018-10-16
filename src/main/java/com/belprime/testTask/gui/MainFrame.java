@@ -5,34 +5,42 @@ import com.belprime.testTask.logic.WebSearchService;
 import com.belprime.testTask.util.MessageProvider;
 
 import javax.swing.*;
+import javax.swing.table.AbstractTableModel;
 import java.awt.*;
-import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
 
 import static com.belprime.testTask.util.Constants.TITLE;
 
 public class MainFrame extends JFrame {
+
+    private GridBagConstraints gbc = new GridBagConstraints();
     private static String message;
-    private GridBagConstraints gbc;
     private final JTextField textField = new JTextField(30);
-    private final String[] columnNames = {"No", "URL", "Title",};
-    private Object[][] tmpData = new Object[10][3];
-    private JTable tmpTable = new JTable(tmpData, columnNames);
+    private JTable table;
+    private JScrollPane sp;
+    private AbstractTableModel model;
 
     public MainFrame() {
         super(TITLE);
-        showFrame(tmpTable);
 
-        setSize(800, 300);
+        ConcurrentHashMap<String, String> map = new ConcurrentHashMap<>();
+        map.put("url1", "title1");
+        map.put("url2", "title2");
+        map.put("url3", "title3");
+
+        model = new TableModel(map);
+        table = new JTable(model);
+
+        showFrame();
+        setSize(800, 800);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setVisible(true);
     }
 
-    private void showFrame(JTable t) {
+    private void showFrame() {
         setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
         setLayout(new GridBagLayout());
-        gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.anchor = GridBagConstraints.NORTH;
         gbc.weighty = 0;
@@ -41,59 +49,31 @@ public class MainFrame extends JFrame {
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.weightx = 1;
-        gbc.insets = new Insets(30, 200, 20, 5);
+        gbc.insets = new Insets(30, 100, 20, 5);
         add(textField, gbc);
 
         JButton searchButton = new JButton("Search");
         gbc.gridx = 1;
         gbc.gridy = 0;
         gbc.weightx = 0;
-        gbc.insets = new Insets(26, 5, 20, 200);
+        gbc.insets = new Insets(26, 5, 20, 100);
         add(searchButton, gbc);
 
+//        getContentPane().add(new JScrollPane(table), BorderLayout.CENTER);
+//        pack();
+        sp = new JScrollPane(table);
         gbc.gridx = 0;
         gbc.gridy = 1;
         gbc.gridwidth = 3;
         gbc.weightx = 1;
         gbc.weighty = 1;
         gbc.insets = new Insets(20, 20, 5, 20);
-        add(t, gbc);
+        add(sp, gbc);
 
         searchButton.addActionListener(e -> {
             MainFrame.message = textField.getText();
             start();
         });
-    }
-
-    private void showResultTable(ConcurrentHashMap<String, String> map) {
-        repaint();
-        String[] columnNames = {"No", "URL", "Title",};
-        Object[][] data = getData(map);
-        JTable table = new JTable(data, columnNames);
-
-        gbc.gridx = 0;
-        gbc.gridy = 1;
-        gbc.gridwidth = 3;
-        gbc.weightx = 1;
-        gbc.weighty = 1;
-        gbc.insets = new Insets(20, 20, 5, 20);
-        add(table, gbc);
-
-        setSize(800, 300);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setVisible(true);
-    }
-
-    private Object[][] getData(ConcurrentHashMap<String, String> map) {
-        Object[][] data = new Object[map.size()][3];
-        int i = 0;
-        for (Map.Entry<String, String> entry : map.entrySet()) {
-            data[i][0] = i + 1;
-            data[i][1] = entry.getKey();
-            data[i][2] = entry.getValue();
-            i++;
-        }
-        return data;
     }
 
     private void start() {
@@ -117,9 +97,21 @@ public class MainFrame extends JFrame {
 
                     protected void done() {
                         try {
+                            remove(sp);
                             ConcurrentHashMap<String, String> map = get();
-                            remove(tmpTable);
-                            showResultTable(map);
+                            model = new TableModel(map);
+                            table = new JTable(model);
+                            model.fireTableDataChanged();
+                            sp = new JScrollPane(table);
+                            gbc.gridx = 0;
+                            gbc.gridy = 1;
+                            gbc.gridwidth = 3;
+                            gbc.weightx = 1;
+                            gbc.weighty = 1;
+                            gbc.insets = new Insets(20, 20, 5, 20);
+                            repaint();
+                            add(sp, gbc);
+
                         } catch (InterruptedException | ExecutionException e) {
                             e.printStackTrace();
                         }
@@ -128,5 +120,4 @@ public class MainFrame extends JFrame {
 
         worker.execute();
     }
-
 }
