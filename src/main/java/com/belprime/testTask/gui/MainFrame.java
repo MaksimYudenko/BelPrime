@@ -96,21 +96,14 @@ public class MainFrame extends JFrame {
                             table = new JTable(model);
                             model.fireTableDataChanged();
                             sp = new JScrollPane(table);
-                            gbc.gridx = 0;
-                            gbc.gridy = 1;
-                            gbc.gridwidth = 3;
-                            gbc.weightx = 1;
-                            gbc.weighty = 1;
-                            gbc.insets = new Insets(20, 20, 5, 20);
                             add(sp, gbc);
                             pack();
-
                         } catch (InterruptedException | ExecutionException e) {
                             e.printStackTrace();
                         }
                     }
                 };
-
         worker.execute();
     }
+
 }
