@@ -27,11 +27,7 @@ public class MainFrame extends JFrame {
         Map<String, String> map = new ConcurrentHashMap<>();
         model = new TableModel(map);
         table = new JTable(model);
-
         showFrame();
-        setSize(800, 800);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setVisible(true);
     }
 
     private void showFrame() {
@@ -62,11 +58,16 @@ public class MainFrame extends JFrame {
         gbc.weightx = 1;
         gbc.weighty = 1;
         gbc.insets = new Insets(20, 20, 5, 20);
+        sp.setOpaque(true);
         add(sp, gbc);
         searchButton.addActionListener(e -> {
             MainFrame.message = textField.getText();
             start();
         });
+
+        setSize(800, 800);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setVisible(true);
     }
 
     private void start() {
