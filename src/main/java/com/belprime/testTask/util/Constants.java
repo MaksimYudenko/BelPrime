@@ -19,5 +19,6 @@ public class Constants {
     BelPrime! google;  лучший фильм 2018 года/      Nike или Adidas? Погода - Минск.
     */
     public final static String TITLE = "BelPrime web search";
+    public final static String[] COLUMN_NAMES = {"No", "URL", "Title"};
 
 }
