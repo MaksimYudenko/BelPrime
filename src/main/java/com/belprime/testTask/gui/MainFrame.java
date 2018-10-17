@@ -52,6 +52,8 @@ public class MainFrame extends JFrame {
         add(searchButton, gbc);
 
         sp = new JScrollPane(table);
+        table.setPreferredScrollableViewportSize(new Dimension(650, 100));
+        table.setFillsViewportHeight(true);
         gbc.gridx = 0;
         gbc.gridy = 1;
         gbc.gridwidth = 3;
@@ -64,8 +66,7 @@ public class MainFrame extends JFrame {
             MainFrame.message = textField.getText();
             start();
         });
-
-        setSize(800, 800);
+        setSize(700, 250);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setVisible(true);
     }
@@ -95,8 +96,10 @@ public class MainFrame extends JFrame {
                             ConcurrentHashMap<String, String> map = get();
                             model = new TableModel(map);
                             table = new JTable(model);
-                            model.fireTableDataChanged();
+                            table.setPreferredScrollableViewportSize(new Dimension(650, 100));
+                            table.setFillsViewportHeight(true);
                             sp = new JScrollPane(table);
+                            model.fireTableDataChanged();
                             add(sp, gbc);
                             pack();
                         } catch (InterruptedException | ExecutionException e) {
