@@ -52,7 +52,7 @@ public class MainFrame extends JFrame {
         add(searchButton, gbc);
 
         sp = new JScrollPane(table);
-        table.setPreferredScrollableViewportSize(new Dimension(650, 100));
+        table.setPreferredScrollableViewportSize(new Dimension(650, 175));
         table.setFillsViewportHeight(true);
         gbc.gridx = 0;
         gbc.gridy = 1;
@@ -66,7 +66,7 @@ public class MainFrame extends JFrame {
             MainFrame.message = textField.getText();
             start();
         });
-        setSize(700, 250);
+        setSize(700, 330);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setVisible(true);
     }
@@ -96,7 +96,7 @@ public class MainFrame extends JFrame {
                             ConcurrentHashMap<String, String> map = get();
                             model = new TableModel(map);
                             table = new JTable(model);
-                            table.setPreferredScrollableViewportSize(new Dimension(650, 100));
+                            table.setPreferredScrollableViewportSize(new Dimension(650, 175));
                             table.setFillsViewportHeight(true);
                             sp = new JScrollPane(table);
                             model.fireTableDataChanged();
